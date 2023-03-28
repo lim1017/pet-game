@@ -1,8 +1,9 @@
-const TICK_RATE = 2000;
+import gameState from "./gameState";
 
-function tick() {
-  console.log("tick", Date.now());
-}
+const { tick, clock, current } = gameState;
+const boundTick = tick.bind(gameState);
+
+const TICK_RATE = 2000;
 
 function init() {
   console.log("Starting Game");
@@ -13,14 +14,14 @@ function init() {
     const now = Date.now();
 
     if (nextTimeToTick <= now) {
-      tick();
+      boundTick();
       nextTimeToTick = now + TICK_RATE;
     }
 
     requestAnimationFrame(nextAnimationFrame);
   }
 
-  requestAnimationFrame(nextAnimationFrame);
+  nextAnimationFrame();
 }
 
 init();

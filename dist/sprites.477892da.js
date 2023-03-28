@@ -117,51 +117,62 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"gameState.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-const gameState = {
-  current: "INIT",
-  clock: 1,
-  tick() {
-    this.clock++;
-    console.log(this.clock);
-    return this.clock;
+})({"../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
   }
-};
-var _default = gameState;
-exports.default = _default;
-},{}],"init.js":[function(require,module,exports) {
-"use strict";
-
-var _gameState = _interopRequireDefault(require("./gameState"));
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-const {
-  tick,
-  clock,
-  current
-} = _gameState.default;
-const boundTick = tick.bind(_gameState.default);
-const TICK_RATE = 2000;
-function init() {
-  console.log("Starting Game");
-  let nextTimeToTick = Date.now();
-  function nextAnimationFrame() {
-    const now = Date.now();
-    if (nextTimeToTick <= now) {
-      boundTick();
-      nextTimeToTick = now + TICK_RATE;
-    }
-    requestAnimationFrame(nextAnimationFrame);
-  }
-  nextAnimationFrame();
+  return bundleURL;
 }
-init();
-},{"./gameState":"gameState.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
+    if (matches) {
+      return getBaseURL(matches[0]);
+    }
+  }
+  return '/';
+}
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)?\/[^/]+(?:\?.*)?$/, '$1') + '/';
+}
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"../node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+function updateLink(link) {
+  var newLink = link.cloneNode();
+  newLink.onload = function () {
+    link.remove();
+  };
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+var cssTimeout = null;
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
+  }
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
+    }
+    cssTimeout = null;
+  }, 50);
+}
+module.exports = reloadCSS;
+},{"./bundle-url":"../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"sprites.css":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"./bg/BUTTONS/NotSelected.png":[["NotSelected.9bda7e18.png","bg/BUTTONS/NotSelected.png"],"bg/BUTTONS/NotSelected.png"],"./bg/BUTTONS/Hover.png":[["Hover.7972d370.png","bg/BUTTONS/Hover.png"],"bg/BUTTONS/Hover.png"],"./bg/BUTTONS/Selected.png":[["Selected.f7fd4df2.png","bg/BUTTONS/Selected.png"],"bg/BUTTONS/Selected.png"],"./bg/ICONS/NotSelected.png":[["NotSelected.9e04faf5.png","bg/ICONS/NotSelected.png"],"bg/ICONS/NotSelected.png"],"./bg/ICONS/Hover.png":[["Hover.2338587a.png","bg/ICONS/Hover.png"],"bg/ICONS/Hover.png"],"./bg/ICONS/Selected.png":[["Selected.f11b8f7a.png","bg/ICONS/Selected.png"],"bg/ICONS/Selected.png"],"./pet/FoxBase.png":[["FoxBase.ac352e9d.png","pet/FoxBase.png"],"pet/FoxBase.png"],"./pet/AtRest.png":[["AtRest.6b658b1d.png","pet/AtRest.png"],"pet/AtRest.png"],"./pet/Pooping.png":[["Pooping.8adb046c.png","pet/Pooping.png"],"pet/Pooping.png"],"./pet/Yay.png":[["Yay.0dfdb865.png","pet/Yay.png"],"pet/Yay.png"],"./pet/Rain.png":[["Rain.600573d2.png","pet/Rain.png"],"pet/Rain.png"],"./pet/Hungry.png":[["Hungry.e64ddbd5.png","pet/Hungry.png"],"pet/Hungry.png"],"./pet/Eating.png":[["Eating.12c06356.png","pet/Eating.png"],"pet/Eating.png"],"./pet/Egg.png":[["Egg.c48dcb6e.png","pet/Egg.png"],"pet/Egg.png"],"./pet/TombStone.png":[["TombStone.f2f21ebd.png","pet/TombStone.png"],"pet/TombStone.png"],"./pet/Sleeping.png":[["Sleeping.a2f70ceb.png","pet/Sleeping.png"],"pet/Sleeping.png"],"./bg/rain.png":[["rain.97ab63ec.png","bg/rain.png"],"bg/rain.png"],"./pet/PoopBag.png":[["PoopBag.a2951731.png","pet/PoopBag.png"],"pet/PoopBag.png"],"./bg/FRAME.png":[["FRAME.4b64b0ee.png","bg/FRAME.png"],"bg/FRAME.png"],"./bg/DAY.png":[["DAY.6bb28239.png","bg/DAY.png"],"bg/DAY.png"],"./bg/NIGHT.png":[["NIGHT.1fa3ed43.png","bg/NIGHT.png"],"bg/NIGHT.png"],"./bg/DEAD.png":[["DEAD.2fdcc29e.png","bg/DEAD.png"],"bg/DEAD.png"],"./bg/RAINY.png":[["RAINY.259b0634.png","bg/RAINY.png"],"bg/RAINY.png"],"./bg/Canvas.png":[["Canvas.2b1a6a7b.png","bg/Canvas.png"],"bg/Canvas.png"],"_css_loader":"../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -330,5 +341,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js","init.js"], null)
-//# sourceMappingURL=/init.9d6cb373.js.map
+},{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)
+//# sourceMappingURL=/sprites.477892da.js.map
