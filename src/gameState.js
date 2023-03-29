@@ -16,30 +16,31 @@ const gameState = {
   sleepTime: -1,
   hungryTime: -1,
   dieTime: -1,
+  poopTime: -1,
   timeToCelebrate: -1,
   timeToStopCelebrate: -1,
   tick() {
     this.clock++;
-
+    console.log(this.clock, this);
     if (this.clock === this.wakeTime) {
       this.wake();
     } else if (this.clock === this.sleepTime) {
       this.sleep();
     } else if (this.clock === this.hungryTime) {
       this.getHungry();
-    } else if (this.clock === this.dieTime) {
-      this.die();
     } else if (this.clock === this.timeToCelebrate) {
       this.celebrate();
     } else if (this.clock === this.timeToStopCelebrate) {
       this.endCelebrate();
+    } else if (this.clock === this.poopTime) {
+      this.poop();
+    } else if (this.clock === this.dieTime) {
+      this.die();
     }
 
     return this.clock;
   },
   handleUserAction(icon) {
-    console.log(icon);
-
     if (["SLEEP", "FEEDING", "CELEBRATING", "HATCHING"].includes(this.current))
       return;
 
@@ -90,8 +91,27 @@ const gameState = {
     this.dieTime = getNextDieTime(this.clock);
     this.hungryTime = -1;
   },
+  feed() {
+    if (this.current !== "HUNGRY") return;
+
+    this.current = "FEEDING";
+    this.dieTime = -1;
+    this.poopTime = getNextPoopTime(this.clock);
+    modFox("eating");
+    this.timeToCelebrate = this.clock + 2;
+    console.log(this.poopTime, "pooptime");
+  },
+  poop() {
+    this.current = "POOPING";
+    this.poopTime = -1;
+    this.dieTime = getNextDieTime(this.clock);
+    modFox("pooping");
+  },
   die() {
-    modFox("die");
+    modFox("dead");
+    modScene("dead");
+    this.current = "DEAD";
+
     console.log("dead fox");
   },
   celebrate() {
@@ -104,6 +124,7 @@ const gameState = {
     this.current = "IDLING";
     this.timeToStopCelebrate = -1;
     this.determinePetState();
+    togglePoop(false);
   },
   determinePetState() {
     if (this.current === "IDLING") {
@@ -119,15 +140,12 @@ const gameState = {
   },
   cleanUpPoop() {
     console.log("cleanup poop");
-  },
-  feed() {
-    if (this.current !== "HUNGRY") return;
+    if (this.current !== "POOPING") return;
 
-    this.current = "FEEDING";
     this.dieTime = -1;
-    this.poopTime = getNextPoopTime(this.clock);
-    modFox("eating");
-    this.timeToCelebrate = this.clock + 2;
+    togglePoop(true);
+    this.celebrate();
+    this.hungryTime = getNextHungerTime(this.clock);
   },
 };
 
