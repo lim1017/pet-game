@@ -117,51 +117,166 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"gameState.js":[function(require,module,exports) {
+})({"ui.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.togglePoop = exports.modScene = exports.modFox = void 0;
+const modFox = function modFox(state) {
+  document.querySelector(".fox").className = `fox fox-${state}`;
+};
+exports.modFox = modFox;
+const modScene = function modScene(state) {
+  document.querySelector(".game").className = `game ${state}`;
+};
+exports.modScene = modScene;
+const togglePoop = function TogglePoop(show) {
+  document.querySelector(".poop-bag").classList.toggle("hidden", !show);
+};
+exports.togglePoop = togglePoop;
+},{}],"constants.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.TICK_RATE = exports.SCENES = exports.RAIN_CHANCE = exports.ICONS = void 0;
+const TICK_RATE = 2000;
+exports.TICK_RATE = TICK_RATE;
+const ICONS = ["fish", "poop", "weather"];
+exports.ICONS = ICONS;
+const RAIN_CHANCE = 0.2;
+exports.RAIN_CHANCE = RAIN_CHANCE;
+const SCENES = ["day", "rain"];
+exports.SCENES = SCENES;
+},{}],"gameState.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = void 0;
+var _ui = require("./ui");
+var _constants = require("./constants");
 const gameState = {
   current: "INIT",
   clock: 1,
+  wakeTime: -1,
   tick() {
     this.clock++;
     console.log(this.clock);
+    if (this.clock === this.wakeTime) {
+      this.wake();
+    }
     return this.clock;
+  },
+  handleUserAction(icon) {
+    console.log(icon);
+    if (["SLEEP", "FEEDING", "CELEBRATING", "HATCHING"].includes(this.current)) return;
+    if (this.current === "INIT" || this.current === "DEAD") {
+      this.startGame();
+      return;
+    }
+    switch (icon) {
+      case "weather":
+        this.changeWeather();
+        break;
+      case "poop":
+        this.cleanUpPoop();
+        break;
+      case "fish":
+        this.feed();
+        break;
+    }
+  },
+  startGame() {
+    console.log("Starting Game");
+    this.current = "HATCHING";
+    this.wakeTime = this.clock + 3;
+    (0, _ui.modFox)("egg");
+    (0, _ui.modScene)("day");
+  },
+  wake() {
+    this.current = "IDLING";
+    this.wakeTime = -1;
+    (0, _ui.modFox)("idling");
+    this.scene = Math.random() > _constants.RAIN_CHANCE ? 0 : 1;
+    (0, _ui.modScene)(_constants.SCENES[this.scene]);
+  },
+  changeWeather() {
+    console.log("chg weather");
+  },
+  cleanUpPoop() {
+    console.log("cleanup poop");
+  },
+  feed() {
+    console.log("feed");
   }
 };
 var _default = gameState;
 exports.default = _default;
-},{}],"init.js":[function(require,module,exports) {
+},{"./ui":"ui.js","./constants":"constants.js"}],"buttons.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = initButtons;
+var _constants = require("./constants");
+const toggleHighlighted = (icon, show) => {
+  document.querySelector(`.${_constants.ICONS[icon]}-icon`).classList.toggle("highlighted", show);
+};
+function initButtons(handleUserAction) {
+  let selectedIcon = 0;
+  function buttonClick(event) {
+    if (event.target.classList.contains("left-btn")) {
+      //turns off current
+      toggleHighlighted(selectedIcon, false);
+      selectedIcon = (2 + selectedIcon) % _constants.ICONS.length;
+      //highlights new icon
+      toggleHighlighted(selectedIcon, true);
+    } else if (event.target.classList.contains("right-btn")) {
+      toggleHighlighted(selectedIcon, false);
+      selectedIcon = (1 + selectedIcon) % _constants.ICONS.length;
+      toggleHighlighted(selectedIcon, true);
+    } else {
+      handleUserAction(_constants.ICONS[selectedIcon]);
+    }
+  }
+  document.querySelector(".buttons").addEventListener("click", buttonClick);
+}
+},{"./constants":"constants.js"}],"init.js":[function(require,module,exports) {
 "use strict";
 
 var _gameState = _interopRequireDefault(require("./gameState"));
+var _constants = require("./constants");
+var _buttons = _interopRequireDefault(require("./buttons"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 const {
+  handleUserAction,
   tick,
   clock,
   current
 } = _gameState.default;
 const boundTick = tick.bind(_gameState.default);
-const TICK_RATE = 2000;
+const boundUserAction = handleUserAction.bind(_gameState.default);
 function init() {
-  console.log("Starting Game");
+  (0, _buttons.default)(boundUserAction);
   let nextTimeToTick = Date.now();
   function nextAnimationFrame() {
     const now = Date.now();
     if (nextTimeToTick <= now) {
       boundTick();
-      nextTimeToTick = now + TICK_RATE;
+      nextTimeToTick = now + _constants.TICK_RATE;
     }
     requestAnimationFrame(nextAnimationFrame);
   }
   nextAnimationFrame();
 }
 init();
-},{"./gameState":"gameState.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./gameState":"gameState.js","./constants":"constants.js","./buttons":"buttons.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;

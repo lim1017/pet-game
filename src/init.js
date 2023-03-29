@@ -1,12 +1,13 @@
 import gameState from "./gameState";
+import { TICK_RATE } from "./constants";
+import initButtons from "./buttons";
 
-const { tick, clock, current } = gameState;
+const { handleUserAction, tick, clock, current } = gameState;
 const boundTick = tick.bind(gameState);
-
-const TICK_RATE = 2000;
+const boundUserAction = handleUserAction.bind(gameState);
 
 function init() {
-  console.log("Starting Game");
+  initButtons(boundUserAction);
 
   let nextTimeToTick = Date.now();
 
