@@ -143,3 +143,33 @@ body {
   top: 380px;
   left: 243px;
 }
+
+/* heart */
+.heart-container {
+  position: absolute;
+  top: 100px;
+  right: 180px;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heart {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  padding: 2px;
+  opacity: 0.5;
+  transition: transform 1s ease-in-out;
+}
+
+.heart.animate {
+  opacity: 1;
+  transform: scale(1.5);
+}
+
+.heart.filled {
+  opacity: 1;
+}

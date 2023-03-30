@@ -170,6 +170,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _ui = require("./ui");
 var _constants = require("./constants");
+const hearts = document.querySelectorAll(".heart");
 const gameState = {
   current: "INIT",
   clock: 1,
@@ -180,6 +181,7 @@ const gameState = {
   poopTime: -1,
   timeToCelebrate: -1,
   timeToStopCelebrate: -1,
+  heartFillCount: 0,
   tick() {
     if (this.current === "DEAD") return;
     this.clock++;
@@ -200,6 +202,16 @@ const gameState = {
       this.die();
     }
     return this.clock;
+  },
+  fillHeart() {
+    if (this.heartFillCount < hearts.length) {
+      hearts[this.heartFillCount].classList.add("animate");
+      setTimeout(() => {
+        hearts[this.heartFillCount].classList.add("filled");
+        hearts[this.heartFillCount].classList.remove("animate");
+        this.heartFillCount++;
+      }, 1000);
+    }
   },
   handleUserAction(icon) {
     if (["SLEEP", "FEEDING", "CELEBRATING", "HATCHING"].includes(this.current)) return;
@@ -255,7 +267,7 @@ const gameState = {
     this.poopTime = (0, _constants.getNextPoopTime)(this.clock);
     (0, _ui.modFox)("eating");
     this.timeToCelebrate = this.clock + 2;
-    console.log(this.poopTime, "pooptime");
+    this.fillHeart();
   },
   poop() {
     this.current = "POOPING";
