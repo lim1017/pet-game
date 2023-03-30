@@ -77,14 +77,17 @@
 .fox-hurt {
   background-image: url(./pet/Hurt.png);
   background-repeat: no-repeat;
-  width: 175px;
-  height: 210px;
-  animation: hurt 3s steps(3);
+  width: 160px;
+  height: 165px;
+  animation: hurt 3s steps(3) infinite;
 }
 
 @keyframes hurt {
+  from {
+    background-position: 0;
+  }
   to {
-    background-position: -200px;
+    background-position: -690px;
   }
 }
 

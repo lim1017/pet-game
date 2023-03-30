@@ -181,8 +181,7 @@ const gameState = {
   poopTime: -1,
   timeToCelebrate: -1,
   timeToStopCelebrate: -1,
-  heartFillCount: 1,
-  //todo make it so it restarts game with 1
+  heartFillCount: 0,
   tick() {
     if (this.current === "DEAD") return;
     this.clock++;
@@ -234,18 +233,14 @@ const gameState = {
       case "weather":
         this.changeWeather();
         break;
-      case "poop":
-        this.cleanUpPoop();
-        break;
-      case "fish":
-        this.feed();
-        break;
+        startGame;
     }
   },
   startGame() {
     console.log("Starting Game");
     this.current = "HATCHING";
     this.wakeTime = this.clock + 3;
+    this.fillHeart();
     (0, _ui.modFox)("egg");
     (0, _ui.modScene)("day");
   },
