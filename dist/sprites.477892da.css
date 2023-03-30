@@ -74,6 +74,20 @@
   }
 }
 
+.fox-hurt {
+  background-image: url(/Hurt.04dd874e.png);
+  background-repeat: no-repeat;
+  width: 175px;
+  height: 210px;
+  animation: hurt 3s steps(3);
+}
+
+@keyframes hurt {
+  to {
+    background-position: -200px;
+  }
+}
+
 .fox.fox-pooping {
   background-image: url(/Pooping.8adb046c.png);
   background-position: -1836px;

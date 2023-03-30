@@ -21,7 +21,7 @@ const gameState = {
   poopTime: -1,
   timeToCelebrate: -1,
   timeToStopCelebrate: -1,
-  heartFillCount: 0,
+  heartFillCount: 1, //todo make it so it restarts game with 1
   tick() {
     if (this.current === "DEAD") return;
 
@@ -53,6 +53,18 @@ const gameState = {
         hearts[this.heartFillCount].classList.add("filled");
         hearts[this.heartFillCount].classList.remove("animate");
         this.heartFillCount++;
+      }, 1000);
+    }
+  },
+  removeHeart() {
+    if (this.heartFillCount > 0) {
+      hearts[this.heartFillCount - 1].classList.add("unfillAnimate");
+
+      setTimeout(() => {
+        hearts[this.heartFillCount - 1].classList.remove("unfillAnimate");
+        hearts[this.heartFillCount - 1].classList.remove("filled");
+
+        this.heartFillCount--;
       }, 1000);
     }
   },
@@ -124,11 +136,20 @@ const gameState = {
     modFox("pooping");
   },
   die() {
-    modFox("dead");
-    modScene("dead");
-    this.current = "DEAD";
+    if (this.heartFillCount > 0) {
+      modFox("hurt");
+      this.removeHeart();
+      setTimeout(() => {
+        this.wake();
+      }, 3000);
+      return;
+    } else {
+      modFox("dead");
+      modScene("dead");
+      this.current = "DEAD";
 
-    console.log("dead fox");
+      console.log("dead fox");
+    }
   },
   celebrate() {
     this.current = "CELEBRATING";
