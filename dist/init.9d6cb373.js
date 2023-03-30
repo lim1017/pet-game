@@ -149,7 +149,7 @@ const ICONS = ["fish", "poop", "weather"];
 exports.ICONS = ICONS;
 const RAIN_CHANCE = 0.2;
 exports.RAIN_CHANCE = RAIN_CHANCE;
-const SCENES = ["day", "rain", "dead"];
+const SCENES = ["day", "rain"];
 exports.SCENES = SCENES;
 const DAY_LENGTH = 60;
 exports.DAY_LENGTH = DAY_LENGTH;
@@ -181,6 +181,7 @@ const gameState = {
   timeToCelebrate: -1,
   timeToStopCelebrate: -1,
   tick() {
+    if (this.current === "DEAD") return;
     this.clock++;
     console.log(this.clock, this);
     if (this.clock === this.wakeTime) {
@@ -290,7 +291,9 @@ const gameState = {
     }
   },
   changeWeather() {
-    console.log("chg weather");
+    this.scene = this.scene === 1 ? 2 : 1;
+    (0, _ui.modScene)(_constants.SCENES[this.scene]);
+    this.determinePetState();
   },
   cleanUpPoop() {
     console.log("cleanup poop");
@@ -387,7 +390,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43785" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41643" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

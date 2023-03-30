@@ -20,6 +20,8 @@ const gameState = {
   timeToCelebrate: -1,
   timeToStopCelebrate: -1,
   tick() {
+    if (this.current === "DEAD") return;
+
     this.clock++;
     console.log(this.clock, this);
     if (this.clock === this.wakeTime) {
@@ -136,7 +138,9 @@ const gameState = {
     }
   },
   changeWeather() {
-    console.log("chg weather");
+    this.scene = this.scene === 1 ? 2 : 1;
+    modScene(SCENES[this.scene]);
+    this.determinePetState();
   },
   cleanUpPoop() {
     console.log("cleanup poop");
