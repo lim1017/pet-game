@@ -123,7 +123,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.togglePoop = exports.modScene = exports.modFox = void 0;
+exports.writeModal = exports.togglePoop = exports.modScene = exports.modFox = void 0;
 const modFox = function modFox(state) {
   document.querySelector(".fox").className = `fox fox-${state}`;
 };
@@ -136,6 +136,10 @@ const togglePoop = function TogglePoop(show) {
   document.querySelector(".poop-bag").classList.toggle("hidden", !show);
 };
 exports.togglePoop = togglePoop;
+const writeModal = function writeModal(text = "") {
+  document.querySelector(".modal").innerHTML = `<div class="modal-inner">${text}</div>`;
+};
+exports.writeModal = writeModal;
 },{}],"constants.js":[function(require,module,exports) {
 "use strict";
 
@@ -143,7 +147,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.getNextPoopTime = exports.getNextHungerTime = exports.getNextDieTime = exports.TICK_RATE = exports.SCENES = exports.RAIN_CHANCE = exports.NIGHT_LENGTH = exports.ICONS = exports.DAY_LENGTH = void 0;
-const TICK_RATE = 1000;
+const TICK_RATE = 2000;
 exports.TICK_RATE = TICK_RATE;
 const ICONS = ["fish", "poop", "weather"];
 exports.ICONS = ICONS;
@@ -3564,12 +3568,12 @@ const gameState = {
     }
   },
   startGame() {
-    console.log("Starting Game");
     this.current = "HATCHING";
     this.wakeTime = this.clock + 3;
     this.fillHeart();
     (0, _ui.modFox)("egg");
     (0, _ui.modScene)("day");
+    (0, _ui.writeModal)("Welcome, Keep your pet alive by feeding and cleaning!");
   },
   wake() {
     this.current = "IDLING";
@@ -3593,6 +3597,7 @@ const gameState = {
     this.dieTime = (0, _constants.getNextDieTime)(this.clock);
     _audio.hungryAudio.play();
     this.hungryTime = -1;
+    (0, _ui.writeModal)("Your pet is hungry Food time!");
   },
   feed() {
     if (this.current !== "HUNGRY") return;
@@ -3604,6 +3609,7 @@ const gameState = {
     this.fillHeart();
   },
   poop() {
+    (0, _ui.writeModal)("Your pet is pooping, clean up!");
     this.current = "POOPING";
     this.poopTime = -1;
     this.dieTime = (0, _constants.getNextDieTime)(this.clock);
@@ -3614,22 +3620,25 @@ const gameState = {
   },
   die() {
     if (this.heartFillCount > 0) {
+      (0, _ui.writeModal)("You neglected your pet!");
       _audio.ouchAudio.play();
       (0, _ui.modFox)("hurt");
       this.removeHeart();
       setTimeout(() => {
         this.wake();
+        (0, _ui.writeModal)("");
       }, 3000);
       return;
     } else {
+      (0, _ui.writeModal)("RIP, Try again!");
       _audio.failGameAudio.play();
       (0, _ui.modFox)("dead");
       (0, _ui.modScene)("dead");
       this.current = "DEAD";
-      console.log("dead fox");
     }
   },
   celebrate() {
+    (0, _ui.writeModal)("");
     this.current = "CELEBRATING";
     (0, _ui.modFox)("celebrate");
     this.timeToCelebrate = -1;

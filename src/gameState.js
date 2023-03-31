@@ -1,4 +1,4 @@
-import { modFox, modScene, togglePoop } from "./ui";
+import { modFox, modScene, togglePoop, writeModal } from "./ui";
 import {
   RAIN_CHANCE,
   SCENES,
@@ -105,13 +105,12 @@ const gameState = {
     }
   },
   startGame() {
-    console.log("Starting Game");
-
     this.current = "HATCHING";
     this.wakeTime = this.clock + 3;
     this.fillHeart();
     modFox("egg");
     modScene("day");
+    writeModal("Welcome, Keep your pet alive by feeding and cleaning!");
   },
   wake() {
     this.current = "IDLING";
@@ -135,6 +134,7 @@ const gameState = {
     this.dieTime = getNextDieTime(this.clock);
     hungryAudio.play();
     this.hungryTime = -1;
+    writeModal("Your pet is hungry Food time!");
   },
   feed() {
     if (this.current !== "HUNGRY") return;
@@ -147,6 +147,7 @@ const gameState = {
     this.fillHeart();
   },
   poop() {
+    writeModal("Your pet is pooping, clean up!");
     this.current = "POOPING";
     this.poopTime = -1;
     this.dieTime = getNextDieTime(this.clock);
@@ -157,23 +158,26 @@ const gameState = {
   },
   die() {
     if (this.heartFillCount > 0) {
+      writeModal("You neglected your pet!");
       ouchAudio.play();
       modFox("hurt");
       this.removeHeart();
       setTimeout(() => {
         this.wake();
+        writeModal("");
       }, 3000);
       return;
     } else {
+      writeModal("RIP, Try again!");
       failGameAudio.play();
       modFox("dead");
       modScene("dead");
       this.current = "DEAD";
-
-      console.log("dead fox");
     }
   },
   celebrate() {
+    writeModal("");
+
     this.current = "CELEBRATING";
     modFox("celebrate");
     this.timeToCelebrate = -1;
