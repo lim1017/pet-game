@@ -9,6 +9,18 @@ import {
   getNextPoopTime,
 } from "./constants";
 
+import { Howl, Howler } from "howler";
+import startGameMP3 from "./audio/how-are-you-doing.mp3";
+
+// const startGameAudio = new Audio(startGameMP3);
+
+let startGameAudio = new Howl({
+  src: [startGameMP3],
+  html5: true,
+});
+
+console.log(startGameAudio);
+
 const hearts = document.querySelectorAll(".heart");
 
 const gameState = {
@@ -26,7 +38,7 @@ const gameState = {
     if (this.current === "DEAD") return;
 
     this.clock++;
-    console.log(this.clock, this);
+    // console.log(this.clock, this);
     if (this.clock === this.wakeTime) {
       this.wake();
     } else if (this.clock === this.sleepTime) {
@@ -102,6 +114,9 @@ const gameState = {
     this.sleepTime = this.clock + DAY_LENGTH;
     this.hungryTime = getNextHungerTime(this.clock);
     this.determinePetState();
+
+    console.log("play audio");
+    startGameAudio.play();
   },
   sleep() {
     this.state = "SLEEP";

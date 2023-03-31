@@ -19,5 +19,8 @@
   },
   "browserslist": [
     "last 2 FireFox versions"
-  ]
+  ],
+  "dependencies": {
+    "howler": "^2.2.3"
+  }
 }
