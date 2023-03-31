@@ -3407,9 +3407,75 @@ var global = arguments[3];
   };
 })();
 
-},{}],"audio/how-are-you-doing.mp3":[function(require,module,exports) {
-module.exports = "/how-are-you-doing.dc3a7371.mp3";
-},{}],"gameState.js":[function(require,module,exports) {
+},{}],"audio/cartoon-hello.mp3":[function(require,module,exports) {
+module.exports = "/cartoon-hello.33bfce4f.mp3";
+},{}],"audio/echoed-hello-1-95898.mp3":[function(require,module,exports) {
+module.exports = "/echoed-hello-1-95898.a741b437.mp3";
+},{}],"audio/hello-female-friendly-professional-87141.mp3":[function(require,module,exports) {
+module.exports = "/hello-female-friendly-professional-87141.3d3225f7.mp3";
+},{}],"audio/pinkie-pie-hello-86138.mp3":[function(require,module,exports) {
+module.exports = "/pinkie-pie-hello-86138.b6995517.mp3";
+},{}],"audio/grumbles-38430.mp3":[function(require,module,exports) {
+module.exports = "/grumbles-38430.62ad7ad5.mp3";
+},{}],"audio/poop.mp3":[function(require,module,exports) {
+module.exports = "/poop.e2e35c3d.mp3";
+},{}],"audio/level-fail-sound-effect.mp3":[function(require,module,exports) {
+module.exports = "/level-fail-sound-effect.1bbc81d8.mp3";
+},{}],"audio/ouch.mp3":[function(require,module,exports) {
+module.exports = "/ouch.ae0345fe.mp3";
+},{}],"audio/celebrate.mp3":[function(require,module,exports) {
+module.exports = "/celebrate.1f0f7714.mp3";
+},{}],"audio.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.startGameAudio = exports.poopAudio = exports.ouchAudio = exports.hungryAudio = exports.failGameAudio = exports.celebrateAudio = void 0;
+var _howler = require("howler");
+var _cartoonHello = _interopRequireDefault(require("./audio/cartoon-hello.mp3"));
+var _echoedHello = _interopRequireDefault(require("./audio/echoed-hello-1-95898.mp3"));
+var _helloFemaleFriendlyProfessional = _interopRequireDefault(require("./audio/hello-female-friendly-professional-87141.mp3"));
+var _pinkiePieHello = _interopRequireDefault(require("./audio/pinkie-pie-hello-86138.mp3"));
+var _grumbles = _interopRequireDefault(require("./audio/grumbles-38430.mp3"));
+var _poop = _interopRequireDefault(require("./audio/poop.mp3"));
+var _levelFailSoundEffect = _interopRequireDefault(require("./audio/level-fail-sound-effect.mp3"));
+var _ouch = _interopRequireDefault(require("./audio/ouch.mp3"));
+var _celebrate = _interopRequireDefault(require("./audio/celebrate.mp3"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+const introArr = [_cartoonHello.default, _echoedHello.default, _helloFemaleFriendlyProfessional.default, _pinkiePieHello.default];
+const selectedIntro = introArr[Math.floor(Math.random() * 5)];
+const startGameAudio = new _howler.Howl({
+  src: [selectedIntro],
+  html5: true
+});
+exports.startGameAudio = startGameAudio;
+const celebrateAudio = new _howler.Howl({
+  src: [_celebrate.default],
+  html5: true
+});
+exports.celebrateAudio = celebrateAudio;
+const ouchAudio = new _howler.Howl({
+  src: [_ouch.default],
+  html5: true
+});
+exports.ouchAudio = ouchAudio;
+const hungryAudio = new _howler.Howl({
+  src: [_grumbles.default],
+  html5: true
+});
+exports.hungryAudio = hungryAudio;
+const poopAudio = new _howler.Howl({
+  src: [_poop.default],
+  html5: true
+});
+exports.poopAudio = poopAudio;
+const failGameAudio = new _howler.Howl({
+  src: [_levelFailSoundEffect.default],
+  html5: true
+});
+exports.failGameAudio = failGameAudio;
+},{"howler":"../node_modules/howler/dist/howler.js","./audio/cartoon-hello.mp3":"audio/cartoon-hello.mp3","./audio/echoed-hello-1-95898.mp3":"audio/echoed-hello-1-95898.mp3","./audio/hello-female-friendly-professional-87141.mp3":"audio/hello-female-friendly-professional-87141.mp3","./audio/pinkie-pie-hello-86138.mp3":"audio/pinkie-pie-hello-86138.mp3","./audio/grumbles-38430.mp3":"audio/grumbles-38430.mp3","./audio/poop.mp3":"audio/poop.mp3","./audio/level-fail-sound-effect.mp3":"audio/level-fail-sound-effect.mp3","./audio/ouch.mp3":"audio/ouch.mp3","./audio/celebrate.mp3":"audio/celebrate.mp3"}],"gameState.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3418,16 +3484,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _ui = require("./ui");
 var _constants = require("./constants");
-var _howler = require("howler");
-var _howAreYouDoing = _interopRequireDefault(require("./audio/how-are-you-doing.mp3"));
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-// const startGameAudio = new Audio(startGameMP3);
-
-let startGameAudio = new _howler.Howl({
-  src: [_howAreYouDoing.default],
-  html5: true
-});
-console.log(startGameAudio);
+var _audio = require("./audio");
 const hearts = document.querySelectorAll(".heart");
 const gameState = {
   current: "INIT",
@@ -3446,6 +3503,7 @@ const gameState = {
     // console.log(this.clock, this);
     if (this.clock === this.wakeTime) {
       this.wake();
+      _audio.startGameAudio.play();
     } else if (this.clock === this.sleepTime) {
       this.sleep();
     } else if (this.clock === this.hungryTime) {
@@ -3468,6 +3526,10 @@ const gameState = {
         hearts[this.heartFillCount].classList.add("filled");
         hearts[this.heartFillCount].classList.remove("animate");
         this.heartFillCount++;
+
+        // if (this.heartFillCount === hearts.length) {
+        //   victoryAudio.play();
+        // }
       }, 1000);
     }
   },
@@ -3487,11 +3549,18 @@ const gameState = {
       this.startGame();
       return;
     }
+
+    // execute the currently selected action
     switch (icon) {
       case "weather":
         this.changeWeather();
         break;
-        startGame;
+      case "poop":
+        this.cleanUpPoop();
+        break;
+      case "fish":
+        this.feed();
+        break;
     }
   },
   startGame() {
@@ -3511,8 +3580,6 @@ const gameState = {
     this.sleepTime = this.clock + _constants.DAY_LENGTH;
     this.hungryTime = (0, _constants.getNextHungerTime)(this.clock);
     this.determinePetState();
-    console.log("play audio");
-    startGameAudio.play();
   },
   sleep() {
     this.state = "SLEEP";
@@ -3524,6 +3591,7 @@ const gameState = {
     (0, _ui.modFox)("hungry");
     this.current = "HUNGRY";
     this.dieTime = (0, _constants.getNextDieTime)(this.clock);
+    _audio.hungryAudio.play();
     this.hungryTime = -1;
   },
   feed() {
@@ -3540,9 +3608,13 @@ const gameState = {
     this.poopTime = -1;
     this.dieTime = (0, _constants.getNextDieTime)(this.clock);
     (0, _ui.modFox)("pooping");
+    setTimeout(() => {
+      _audio.poopAudio.play();
+    }, 2500);
   },
   die() {
     if (this.heartFillCount > 0) {
+      _audio.ouchAudio.play();
       (0, _ui.modFox)("hurt");
       this.removeHeart();
       setTimeout(() => {
@@ -3550,6 +3622,7 @@ const gameState = {
       }, 3000);
       return;
     } else {
+      _audio.failGameAudio.play();
       (0, _ui.modFox)("dead");
       (0, _ui.modScene)("dead");
       this.current = "DEAD";
@@ -3560,7 +3633,8 @@ const gameState = {
     this.current = "CELEBRATING";
     (0, _ui.modFox)("celebrate");
     this.timeToCelebrate = -1;
-    this.timeToStopCelebrate = this.clock + 3;
+    this.timeToStopCelebrate = this.clock + 2;
+    _audio.celebrateAudio.play();
   },
   endCelebrate() {
     this.current = "IDLING";
@@ -3593,7 +3667,7 @@ const gameState = {
 };
 var _default = gameState;
 exports.default = _default;
-},{"./ui":"ui.js","./constants":"constants.js","howler":"../node_modules/howler/dist/howler.js","./audio/how-are-you-doing.mp3":"audio/how-are-you-doing.mp3"}],"buttons.js":[function(require,module,exports) {
+},{"./ui":"ui.js","./constants":"constants.js","./audio":"audio.js"}],"buttons.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3677,7 +3751,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44323" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33559" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

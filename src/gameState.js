@@ -9,17 +9,14 @@ import {
   getNextPoopTime,
 } from "./constants";
 
-import { Howl, Howler } from "howler";
-import startGameMP3 from "./audio/how-are-you-doing.mp3";
-
-// const startGameAudio = new Audio(startGameMP3);
-
-let startGameAudio = new Howl({
-  src: [startGameMP3],
-  html5: true,
-});
-
-console.log(startGameAudio);
+import {
+  startGameAudio,
+  poopAudio,
+  ouchAudio,
+  failGameAudio,
+  hungryAudio,
+  celebrateAudio,
+} from "./audio";
 
 const hearts = document.querySelectorAll(".heart");
 
@@ -41,6 +38,7 @@ const gameState = {
     // console.log(this.clock, this);
     if (this.clock === this.wakeTime) {
       this.wake();
+      startGameAudio.play();
     } else if (this.clock === this.sleepTime) {
       this.sleep();
     } else if (this.clock === this.hungryTime) {
@@ -65,6 +63,10 @@ const gameState = {
         hearts[this.heartFillCount].classList.add("filled");
         hearts[this.heartFillCount].classList.remove("animate");
         this.heartFillCount++;
+
+        // if (this.heartFillCount === hearts.length) {
+        //   victoryAudio.play();
+        // }
       }, 1000);
     }
   },
@@ -89,11 +91,17 @@ const gameState = {
       return;
     }
 
+    // execute the currently selected action
     switch (icon) {
       case "weather":
         this.changeWeather();
         break;
-        startGame;
+      case "poop":
+        this.cleanUpPoop();
+        break;
+      case "fish":
+        this.feed();
+        break;
     }
   },
   startGame() {
@@ -114,9 +122,6 @@ const gameState = {
     this.sleepTime = this.clock + DAY_LENGTH;
     this.hungryTime = getNextHungerTime(this.clock);
     this.determinePetState();
-
-    console.log("play audio");
-    startGameAudio.play();
   },
   sleep() {
     this.state = "SLEEP";
@@ -128,6 +133,7 @@ const gameState = {
     modFox("hungry");
     this.current = "HUNGRY";
     this.dieTime = getNextDieTime(this.clock);
+    hungryAudio.play();
     this.hungryTime = -1;
   },
   feed() {
@@ -145,9 +151,13 @@ const gameState = {
     this.poopTime = -1;
     this.dieTime = getNextDieTime(this.clock);
     modFox("pooping");
+    setTimeout(() => {
+      poopAudio.play();
+    }, 2500);
   },
   die() {
     if (this.heartFillCount > 0) {
+      ouchAudio.play();
       modFox("hurt");
       this.removeHeart();
       setTimeout(() => {
@@ -155,6 +165,7 @@ const gameState = {
       }, 3000);
       return;
     } else {
+      failGameAudio.play();
       modFox("dead");
       modScene("dead");
       this.current = "DEAD";
@@ -166,7 +177,8 @@ const gameState = {
     this.current = "CELEBRATING";
     modFox("celebrate");
     this.timeToCelebrate = -1;
-    this.timeToStopCelebrate = this.clock + 3;
+    this.timeToStopCelebrate = this.clock + 2;
+    celebrateAudio.play();
   },
   endCelebrate() {
     this.current = "IDLING";
