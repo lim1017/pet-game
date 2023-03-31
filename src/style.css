@@ -71,6 +71,10 @@ body {
   justify-content: space-between;
 }
 
+.fish-icon {
+  margin-bottom: 11px;
+}
+
 /* poop-bag */
 .poop-bag {
   position: absolute;
