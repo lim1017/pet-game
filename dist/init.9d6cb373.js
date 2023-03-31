@@ -3429,13 +3429,15 @@ module.exports = "/level-fail-sound-effect.1bbc81d8.mp3";
 module.exports = "/ouch.ae0345fe.mp3";
 },{}],"audio/celebrate.mp3":[function(require,module,exports) {
 module.exports = "/celebrate.1f0f7714.mp3";
+},{}],"audio/egg-cracking-6844.mp3":[function(require,module,exports) {
+module.exports = "/egg-cracking-6844.e2284a0a.mp3";
 },{}],"audio.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.startGameAudio = exports.poopAudio = exports.ouchAudio = exports.hungryAudio = exports.failGameAudio = exports.celebrateAudio = void 0;
+exports.startGameAudio = exports.poopAudio = exports.ouchAudio = exports.hungryAudio = exports.hatchingAudio = exports.failGameAudio = exports.celebrateAudio = void 0;
 var _howler = require("howler");
 var _cartoonHello = _interopRequireDefault(require("./audio/cartoon-hello.mp3"));
 var _echoedHello = _interopRequireDefault(require("./audio/echoed-hello-1-95898.mp3"));
@@ -3446,6 +3448,7 @@ var _poop = _interopRequireDefault(require("./audio/poop.mp3"));
 var _levelFailSoundEffect = _interopRequireDefault(require("./audio/level-fail-sound-effect.mp3"));
 var _ouch = _interopRequireDefault(require("./audio/ouch.mp3"));
 var _celebrate = _interopRequireDefault(require("./audio/celebrate.mp3"));
+var _eggCracking = _interopRequireDefault(require("./audio/egg-cracking-6844.mp3"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 const introArr = [_cartoonHello.default, _echoedHello.default, _helloFemaleFriendlyProfessional.default, _pinkiePieHello.default];
 const selectedIntro = introArr[Math.floor(Math.random() * 5)];
@@ -3454,6 +3457,11 @@ const startGameAudio = new _howler.Howl({
   html5: true
 });
 exports.startGameAudio = startGameAudio;
+const hatchingAudio = new _howler.Howl({
+  src: [_eggCracking.default],
+  html5: true
+});
+exports.hatchingAudio = hatchingAudio;
 const celebrateAudio = new _howler.Howl({
   src: [_celebrate.default],
   html5: true
@@ -3479,7 +3487,7 @@ const failGameAudio = new _howler.Howl({
   html5: true
 });
 exports.failGameAudio = failGameAudio;
-},{"howler":"../node_modules/howler/dist/howler.js","./audio/cartoon-hello.mp3":"audio/cartoon-hello.mp3","./audio/echoed-hello-1-95898.mp3":"audio/echoed-hello-1-95898.mp3","./audio/hello-female-friendly-professional-87141.mp3":"audio/hello-female-friendly-professional-87141.mp3","./audio/pinkie-pie-hello-86138.mp3":"audio/pinkie-pie-hello-86138.mp3","./audio/grumbles-38430.mp3":"audio/grumbles-38430.mp3","./audio/poop.mp3":"audio/poop.mp3","./audio/level-fail-sound-effect.mp3":"audio/level-fail-sound-effect.mp3","./audio/ouch.mp3":"audio/ouch.mp3","./audio/celebrate.mp3":"audio/celebrate.mp3"}],"gameState.js":[function(require,module,exports) {
+},{"howler":"../node_modules/howler/dist/howler.js","./audio/cartoon-hello.mp3":"audio/cartoon-hello.mp3","./audio/echoed-hello-1-95898.mp3":"audio/echoed-hello-1-95898.mp3","./audio/hello-female-friendly-professional-87141.mp3":"audio/hello-female-friendly-professional-87141.mp3","./audio/pinkie-pie-hello-86138.mp3":"audio/pinkie-pie-hello-86138.mp3","./audio/grumbles-38430.mp3":"audio/grumbles-38430.mp3","./audio/poop.mp3":"audio/poop.mp3","./audio/level-fail-sound-effect.mp3":"audio/level-fail-sound-effect.mp3","./audio/ouch.mp3":"audio/ouch.mp3","./audio/celebrate.mp3":"audio/celebrate.mp3","./audio/egg-cracking-6844.mp3":"audio/egg-cracking-6844.mp3"}],"gameState.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3574,6 +3582,9 @@ const gameState = {
     (0, _ui.modFox)("egg");
     (0, _ui.modScene)("day");
     (0, _ui.writeModal)("Welcome, Keep your pet alive by feeding and cleaning!");
+    setTimeout(() => {
+      _audio.hatchingAudio.play();
+    }, 1000);
   },
   wake() {
     this.current = "IDLING";
@@ -3760,7 +3771,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33559" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "33451" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

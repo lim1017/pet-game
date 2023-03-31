@@ -10,12 +10,19 @@ import poopSound from "./audio/poop.mp3";
 import failGameSound from "./audio/level-fail-sound-effect.mp3";
 import ouchSound from "./audio/ouch.mp3";
 import celebrateSound from "./audio/celebrate.mp3";
+import hatchingSound from "./audio/egg-cracking-6844.mp3";
+
 const introArr = [intro1, intro2, intro3, intro4];
 
 const selectedIntro = introArr[Math.floor(Math.random() * 5)];
 
 export const startGameAudio = new Howl({
   src: [selectedIntro],
+  html5: true,
+});
+
+export const hatchingAudio = new Howl({
+  src: [hatchingSound],
   html5: true,
 });
 

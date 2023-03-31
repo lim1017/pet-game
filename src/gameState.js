@@ -16,6 +16,7 @@ import {
   failGameAudio,
   hungryAudio,
   celebrateAudio,
+  hatchingAudio,
 } from "./audio";
 
 const hearts = document.querySelectorAll(".heart");
@@ -111,6 +112,9 @@ const gameState = {
     modFox("egg");
     modScene("day");
     writeModal("Welcome, Keep your pet alive by feeding and cleaning!");
+    setTimeout(() => {
+      hatchingAudio.play();
+    }, 1000);
   },
   wake() {
     this.current = "IDLING";

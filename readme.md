@@ -1,5 +1,7 @@
 #Tamagotchi Pet Game
 
+Deployed at https://master--tamagotchi-tom.netlify.app/
+
 Built with vanilla JS html/css.
 
 Expanded on basegame from Front-end masters.
